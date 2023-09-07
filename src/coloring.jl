@@ -1,7 +1,12 @@
 include("algorithms.jl")
 using .Algorithms
 
-lines = readlines("../data/gc_1000")
+include("metaheuristics.jl")
+using .Metaheuristics
+
+using Random
+
+lines = readlines("../data/gc_50")
 
 edges = []
 
@@ -56,16 +61,72 @@ for c in constraints
     r = isConsistent(c,d)
     println("$r, $c")
 end
-=#
+
 
 # println(assignments)
 
 println(length(constraints))
+=#
+
+
+#=
 
 r = backtracking(variables,domain,constraints,assignments,[], successor, goal)
 println(r)
 
+assignmentsII = copy(assignments)
+
+x = backtrackingR(variables[1], variables,domain,constraints,assignmentsII, successor, goal)
+println(x)
+
+
+domains = Dict()
+for variable in variables
+    domains[variable] = copy(domain)
+end
+
+filter = (variable, variables, domains, assignments) -> 
+
+println(domains)
+=#
+
+
+
+# =========== HILL CLIMBER
+
+ev = function evaluate(constraints,assignments) 
+    count = 0
+    for constraint in constraints
+        f = constraint[end]
+        t = constraint[1]
+        if f(t...,assignments)
+            count += 1
+        end
+    end
+    return count
+end
+
+
+hcAssignments = Dict{Int64,Int64}()
+
+for i in variables
+    hcAssignments[i] = rand(0:order-1)
+end
+
+variablesHC = reverse(variables)
+shuffle!(variablesHC)
+
+# println(hcAssignments)
+println("EVALOLD:")
+println(evaluate(constraints,hcAssignments))
+
+z = hillClimberII(variablesHC,domain,constraints,hcAssignments,evaluate,evaluate(constraints,hcAssignments))
+println(hcAssignments)
+println("EVALNEW:")
+println(evaluate(constraints,z))
 #=
+
+
 
 
 r = backtracking(variables,domain,constraints,assignments)

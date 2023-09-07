@@ -1,6 +1,9 @@
 include("algorithms.jl")
 using .Algorithms
 
+include("metaheuristics.jl")
+using .Metaheuristics
+
 x = 2
 x = aFunction(2,3)
 

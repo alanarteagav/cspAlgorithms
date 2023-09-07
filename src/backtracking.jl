@@ -20,7 +20,9 @@ function isConsistent(constraint, assignments)
     f(t...,assignments)
 end
 
-function backtracking(variables, domain, constraints, assignments, stack, successor, goal)
+function backtracking(variables, domain, constraints, assignments, stack, 
+    successor, goal)
+
     i = 0
     variable = variables[i+1]
 
@@ -49,4 +51,55 @@ function backtracking(variables, domain, constraints, assignments, stack, succes
 end
 
 # g = SimpleGraph(UInt8(10))
+function backtrackingR(variable, variables, domain, constraints, assignments, 
+    successor, goal)
 
+    if goal(variables, domain, constraints, assignments)
+        return (assignments, true)
+    end
+    for value in domain
+        assignments[variable] = value
+        consistent = true
+        for constraint in constraints 
+            if !isConsistent(constraint,assignments)
+                consistent = false
+                break
+            end
+        end
+        if consistent
+            (a,finished) = backtrackingR(successor(variable), variables, domain, 
+                constraints, assignments, successor, goal)
+            if finished
+                return (a,finished)
+            end
+        end
+    end
+end
+
+
+function backtrackingF(variable, variables, domain, constraints, assignments, 
+    domains, filter, successor, goal)
+
+    if goal(variables, domain, constraints, assignments)
+        return (assignments, true)
+    end
+    for value in domains[variable]
+        assignments[variable] = value
+        consistent = true
+        for constraint in constraints 
+            if !isConsistent(constraint,assignments)
+                consistent = false
+                break
+            end
+        end
+        if consistent
+            # remove from domains
+            filter(variable, variables, domains, assignments)
+            (a,finished) = backtrackingR(successor(variable), variables, domain, 
+                constraints, assignments, successor, goal)
+            if finished
+                return (a,finished)
+            end
+        end
+    end
+end
