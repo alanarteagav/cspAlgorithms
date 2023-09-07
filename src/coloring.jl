@@ -55,6 +55,9 @@ end
 
 goal = (v, d, c, a) -> a[v[end]] != -1
 
+r = backtracking(variables,domain,constraints,assignments,[], successor, goal)
+println(r)
+
 #=
 d = Dict(0 => 1, 1 => 1, 2 => 2, 3 => 3, 4 => 1)
 for c in constraints
@@ -113,17 +116,32 @@ for i in variables
     hcAssignments[i] = rand(0:order-1)
 end
 
-variablesHC = reverse(variables)
-shuffle!(variablesHC)
+variablesHC = copy(variables)
+# reverse!(variablesHC)
+# shuffle!(variablesHC)
+
 
 # println(hcAssignments)
 println("EVALOLD:")
 println(evaluate(constraints,hcAssignments))
 
-z = hillClimberII(variablesHC,domain,constraints,hcAssignments,evaluate,evaluate(constraints,hcAssignments))
+gl = length(constraints)
+println("CONSTRAINT goal: $gl")
+
+annealingGoal = (v, d, c, a, e) -> e(c,a) == length(c)
+
+restrictedDomain = Vector{Int64}()
+for i in 0:order-1
+    append!(restrictedDomain,i)
+end
+
+z = simulatedAnnealing(variablesHC,restrictedDomain,constraints,hcAssignments,
+hcAssignments,evaluate,evaluate(constraints,hcAssignments), annealingGoal, 200, 0.9999)
+# z = hillClimberII(variablesHC,domain,constraints,hcAssignments,evaluate,evaluate(constraints,hcAssignments))
 println(hcAssignments)
-println("EVALNEW:")
-println(evaluate(constraints,z))
+println("Best solution:")
+ex = evaluate(constraints,z)
+println("$ex")
 #=
 
 

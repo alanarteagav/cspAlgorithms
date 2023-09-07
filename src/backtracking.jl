@@ -1,19 +1,3 @@
-using Graphs
-
-#=
-function aFunction(x,y)
-    x + y
-end
-
-function it(variables)
-    for v in variables
-        println(v)
-    end
-    
-end
-
-=#
-
 function isConsistent(constraint, assignments)
     f = constraint[end]
     t = constraint[1]
