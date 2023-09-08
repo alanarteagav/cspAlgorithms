@@ -39,6 +39,17 @@ function getDiagonalConstraints(n)
             push!(diagonalConstraints, (tupleU,λr))
         end
     end
+    for i in 1:n
+        if i == n
+            tuple = ntuple(j -> ((i+1)-j,j),i)
+            push!(diagonalConstraints, (tuple,λr))
+        else
+            tupleD = ntuple(j -> ((i+1)-j,j),i)
+            push!(diagonalConstraints, (tupleD,λr))
+            tupleU = ntuple(j -> (n-(j-1),j+(n-i)),i)
+            push!(diagonalConstraints, (tupleU,λr))
+        end
+    end
     return diagonalConstraints
 end
 
