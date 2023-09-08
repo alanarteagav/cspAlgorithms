@@ -5,7 +5,7 @@ function simulatedAnnealing(variables, domain, constraints, solution,
     while temperature > 2 && !goal(variables, domain, constraints, solution, evaluate)
         newSolution = copy(solution)
     
-        (variable,value) = chooseNeighbour(variables,domain)
+        (variable,value) = choose(variables,domain)
         newSolution[variable] = value    
         result = evaluate(constraints, newSolution)
         if result > evaluate(constraints, bestSolution) 

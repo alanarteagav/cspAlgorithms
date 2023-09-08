@@ -1,4 +1,4 @@
-export backtrackingColoring, simulatedAnnealingColoring
+export backtrackingColoring, simulatedAnnealingColoring, evolutionStrategyColoring
 
 constraint = (x,y,a) -> if (a[x],a[y]) != (-1,-1)
     a[x] != a[y]
@@ -48,7 +48,6 @@ end
 
 "Graph Coloring solution using Simulated Annealing"
 function simulatedAnnealingColoring(data)
-
     (variables,domain,constraints,assignments) = dataToProblem(data, constraint)
 
     for i in variables
@@ -70,4 +69,18 @@ function simulatedAnnealingColoring(data)
 
     ev = evaluate(constraints,result)
     println("Best SA result (constraints satisfied): [$ev]")
+end
+
+"Graph Coloring solution using Evolution Strategy"
+function evolutionStrategyColoring(data)
+    (variables,domain,constraints,assignments) = dataToProblem(data, constraint)
+
+    goalValue = length(constraints)
+    println("Constraint goal: $goalValue")
+
+    evolutionGoal = (v, d, c, a, e) -> e(c,a) == length(c)
+
+    result = eVolution(variables,domain,constraints,evolutionGoal,3,8,4)
+    ev = evaluate(constraints,result)
+    println("Best ES result (constraints satisfied): [$ev]")
 end

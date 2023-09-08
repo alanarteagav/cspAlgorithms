@@ -23,7 +23,7 @@ function evaluate(constraints,solution)
     return count
 end
 
-function chooseNeighbour(variables, domain)
+function choose(variables, domain)
     variable = variables[rand(1:length(variables))]
     value = domain[rand(1:length(domain))]
     return (variable,value)

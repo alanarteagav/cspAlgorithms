@@ -10,6 +10,9 @@ module Problems
     include("../metaheuristics/Metaheuristics.jl")
     using .Metaheuristics
 
+    include("../evolutionary/Evolutionary.jl")
+    using .Evolutionary
+
     include("../csp/csp.jl")
     using .Csp
     
