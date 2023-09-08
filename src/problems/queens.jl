@@ -88,14 +88,13 @@ function backtrackingQueens(n)
     board = zeros(Int64,n,n)
 
     successor = x -> begin
-        println("max $n");
         if x[2]+1 <= n
             (x[1],x[2]+1)
         else    
             (x[1]+1,1)
         end
     end
-    solution = backtrackingR(variables,domain,constraints,board,successor,goal)
+    solution = backtracking(variables,domain,constraints,board,successor,goal)
     println(sum(solution))
     println(solution)
 end
