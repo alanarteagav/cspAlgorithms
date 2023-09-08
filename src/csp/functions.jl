@@ -6,7 +6,7 @@ end
 
 function isConsistent(constraints, solution)
     for constraint in constraints
-        if !satisfies(constraint,solution)
+        if !Bool(satisfies(constraint,solution))
             return false
         end
     end

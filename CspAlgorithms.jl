@@ -11,24 +11,32 @@ module CspAlgorithms
     # simulatedAnnealingColoring(coloringData)
     # evolutionStrategyColoring(coloringData)
 
+    backtrackingQueens(10)
+
+    #=
     
-    
-    n = 8
+    n = 5
     z = zeros(Int64,n,n)
 
-     z[1,1] = 1
-    # z[1,2] = 1
-    # z[1,5] = 1
-    # z[1,8] = 1
-    # z[2,8] = 1
-    # z[2,3] = 1
-    # z[2,4] = 1
-     z[2,2] = 1
+    #=
+    z[1,1] = 0
+    z[1,2] = 0
+    z[1,5] = 0
+    z[1,8] = 0
+    # z[2,8] = 0
+    # z[2,3] = 0
+    # z[2,4] = 0
+    z[2,2] = 0
+    z[1,8] = 0
+    z[8,1] = 0
+    =#
     
 
-    rC = getRowConstraints(n)
-    cC = getColumnConstraints(n)
-    dC = getDiagonalConstraints(n)
+    #=
+    rC = getRowConstraints(n,λsum)
+    cC = getColumnConstraints(n,λsum)
+    dC = getDiagonalConstraints(n,λsum)
+
 
     ev = evaluate(rC,z)
     println(ev)
@@ -39,9 +47,15 @@ module CspAlgorithms
     ev3 = evaluate(dC,z)
     println(ev3)
 
+    c = getConstraints(n,λsum)
+    evGlobal = evaluate(c,z)
+    println(evGlobal)
+    =#
 
-    
+    cBool = getConstraints(n,λbool)
 
+    bl = isConsistent(cBool,z)
+    println(bl)
 
     #=
     println("===")
@@ -58,7 +72,7 @@ module CspAlgorithms
     end
 
     =#
-    
+    =#
 end
 
 

@@ -6,7 +6,7 @@ function simulatedAnnealing(variables, domain, constraints, solution,
         newSolution = copy(solution)
     
         (variable,value) = choose(variables,domain)
-        newSolution[variable] = value    
+        newSolution[variable...] = value    
         result = evaluate(constraints, newSolution)
         if result > evaluate(constraints, bestSolution) 
             bestSolution = copy(newSolution)

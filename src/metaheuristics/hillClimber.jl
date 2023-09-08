@@ -7,8 +7,8 @@ function hillClimber(variables, domain, constraints, assignments, max)
     peak = max
     for variable in variables
         for value in domain
-            if value != assignments[variable]
-                assignments[variable] = value
+            if value != assignments[variable...]
+                assignments[variable...] = value
                 result = evaluate(constraints, assignments)
                 if result > peak
                     bestAssignment = copy(assignments) 
@@ -37,8 +37,8 @@ function hillClimberI(variables, domain, constraints, assignments, max)
     for variable in variables
         
         for value in domain
-            if value != assignments[variable]
-                assignments[variable] = value
+            if value != assignments[variable...]
+                assignments[variable...] = value
                 result = evaluate(constraints, assignments)
                 if result > peak
                     bestAssignment = copy(assignments) 

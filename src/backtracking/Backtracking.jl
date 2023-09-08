@@ -1,5 +1,5 @@
 module Backtracking
-    export backtracking
+    export backtracking, backtrackingR
     
     include("classicBacktracking.jl")
 

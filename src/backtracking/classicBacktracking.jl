@@ -11,13 +11,13 @@ function backtrackingAux(variables, domain, constraints, solution, stack,
     variable = variables[1]
     while !goal(variables, domain, constraints, solution)
         for value in domain
-            solution[variable] = value
+            solution[variable...] = value
             if isConsistent(constraints,solution)
                 push!(stack, (variable,value))
             end
         end
         (var, val) = pop!(stack)
-        solution[var] = val
+        solution[var...] = val
         variable = successor(var)
         println("Solved variables: $variable")
     end
@@ -26,7 +26,7 @@ end
 
 "Backtracking search algorithm (recursive version)"
 function backtrackingR(variables, domain, constraints, solution, successor, goal)
-    (result, solved) = backtrackingRaux(variables[1], variables, domain, 
+    (result, solved) = backtrackingRaux(1, variables, domain, 
         constraints, copy(solution), successor, goal)
     if solved
         return result
@@ -36,15 +36,19 @@ function backtrackingR(variables, domain, constraints, solution, successor, goal
 end
 
 "Backtracking search algorithm (recursive version) auxiliary function"
-function backtrackingRaux(variable, variables, domain, constraints, solution, 
+function backtrackingRaux(i, variables, domain, constraints, solution, 
     successor, goal)
+    if i > length(variables)
+        return (solution, false)
+    end
+    variable = variables[i]
     if goal(variables, domain, constraints, solution)
         return (solution, true)
     end
     for value in domain
-        solution[variable] = value
+        solution[variable...] = value
         if isConsistent(constraints,solution)
-            (result, solved) = backtrackingRaux(successor(variable), variables, 
+            (result, solved) = backtrackingRaux(i+1, variables, 
                 domain, constraints, copy(solution), successor, goal)
             if solved
                 return (result, solved)
