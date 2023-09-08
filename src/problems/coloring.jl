@@ -1,6 +1,6 @@
 export backtrackingColoring, simulatedAnnealingColoring, evolutionStrategyColoring
 
-constraint = (x,y,a) -> if (a[x],a[y]) != (-1,-1)
+constraint = (a,x,y) -> if (a[x],a[y]) != (-1,-1)
     a[x] != a[y]
 else
     true

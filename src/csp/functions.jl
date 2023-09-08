@@ -1,7 +1,7 @@
 function satisfies(constraint, solution)
     f = constraint[end]
     t = constraint[1]
-    f(t...,solution)
+    f(solution,t...)
 end
 
 function isConsistent(constraints, solution)
@@ -16,9 +16,7 @@ end
 function evaluate(constraints,solution) 
     count = 0
     for constraint in constraints
-        if satisfies(constraint, solution)
-            count += 1
-        end
+        count += satisfies(constraint, solution)
     end
     return count
 end

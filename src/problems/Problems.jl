@@ -2,6 +2,7 @@ module Problems
     export readInput
         
     include("coloring.jl")
+    include("queens.jl")
     include("input.jl")
     
     include("../backtracking/Backtracking.jl")
