@@ -80,7 +80,7 @@ function evolutionStrategyColoring(data)
 
     evolutionGoal = (v, d, c, a, e) -> e(c,a) == length(c)
 
-    result = eVolution(variables,domain,constraints,evolutionGoal,3,8,4)
+    result = eVolution(variables,domain,constraints,evolutionGoal,1,1,4)
     ev = evaluate(constraints,result)
     println("Best ES result (constraints satisfied): [$ev]")
 end
