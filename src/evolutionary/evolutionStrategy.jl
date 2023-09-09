@@ -1,24 +1,27 @@
-function mutate(variables, domain, solution, κ)
-    mutatedSolution = copy(solution)
-    for chromosome in 1:κ
-        mutatedSolution[rand(1:length(variables))] = domain[rand(1:length(domain))]
-    end
-    return mutatedSolution
-end
+using Random
 
 "Evolution strategy"
-function eVolution(variables, domain, constraints, goal, μ, λ, κ)
+function eVolution(variables, domain, constraints, solutionTemplate, goal, μ, λ, κ,
+    mutation)
     Λ = Vector()
     M = Vector()
 
     # initial population
-    for m in 1:μ
-        mSolution = Dict()
-        for i in variables
-            mSolution[i] = rand(domain[1:length(domain)])
+    if isempty(solutionTemplate)
+        println("tr")
+        for m in 1:μ
+            mSolution = copy(solutionTemplate)
+            for i in variables
+                mSolution[i...] = rand(domain[1:length(domain)])
+            end
+            push!(M,mSolution)
         end
-        push!(M,mSolution)
-    end
+    else 
+        for m in 1:μ
+            mSolution = shuffle!(copy(solutionTemplate))
+            push!(M,mSolution)
+        end
+    end 
     bestSolution = M[1]
     generation = 0
 
@@ -26,7 +29,7 @@ function eVolution(variables, domain, constraints, goal, μ, λ, κ)
         generation += 1
         for i in 1:λ
             parent = M[rand(1:length(M))]
-            mutatedSolution = mutate(variables, domain, parent,κ)
+            mutatedSolution = mutation(variables, domain, parent,κ)
             push!(Λ, mutatedSolution)
         end
         # tournament

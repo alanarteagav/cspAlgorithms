@@ -1,6 +1,6 @@
 module Evolutionary
 
-    export eVolution
+    export eVolution, eVolutionI
 
     include("evolutionStrategy.jl")
 

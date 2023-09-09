@@ -71,6 +71,14 @@ function simulatedAnnealingColoring(data)
     println("Best SA result (constraints satisfied): [$ev]")
 end
 
+graphMutation = function(variables, domain, solution, κ)
+    mutatedSolution = copy(solution)
+    for chromosome in 1:κ
+        mutatedSolution[rand(1:length(variables))] = domain[rand(1:length(domain))]
+    end
+    return mutatedSolution
+end
+
 "Graph Coloring solution using Evolution Strategy"
 function evolutionStrategyColoring(data)
     (variables,domain,constraints,assignments) = dataToProblem(data, constraint)
@@ -80,7 +88,8 @@ function evolutionStrategyColoring(data)
 
     evolutionGoal = (v, d, c, a, e) -> e(c,a) == length(c)
 
-    result = eVolution(variables,domain,constraints,evolutionGoal,1,1,4)
+    result = eVolution(variables,domain,constraints,Dict(),evolutionGoal,1,1,4, 
+        graphMutation)
     ev = evaluate(constraints,result)
     println("Best ES result (constraints satisfied): [$ev]")
 end

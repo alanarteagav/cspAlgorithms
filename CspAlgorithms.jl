@@ -7,11 +7,12 @@ module CspAlgorithms
 
     coloringData = readInput("./data/gc_50")
     
-    backtrackingColoring(coloringData)
+    # backtrackingColoring(coloringData)
     # simulatedAnnealingColoring(coloringData)
-    # evolutionStrategyColoring(coloringData)
+    evolutionStrategyColoring(coloringData)
 
-    backtrackingQueens(8)
+    # backtrackingQueens(8)
+    # evolutionStrategyQueens(50)
 
     #=
     

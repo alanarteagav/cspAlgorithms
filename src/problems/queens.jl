@@ -1,8 +1,10 @@
+using Random
+
 export backtrackingQueens, simulatedAnnealingQueens, evolutionStrategyQueens,
     getRowConstraints, getConstraints, getColumnConstraints, getDiagonalConstraints,
-    λsum, λbool, backtrackingQueens
+    λattacks, λconsistent, backtrackingQueens, evolutionStrategyQueens
 
-λbool = function(board,r...)
+λconsistent = function(board,r...)
     n = sum(i->board[i[1],i[2]],r)
     if n > 1 
         return false
@@ -11,9 +13,9 @@ export backtrackingQueens, simulatedAnnealingQueens, evolutionStrategyQueens,
     end
 end
 
-λsum = function(board,r...)
+λattacks = function(board,r...)
     n = sum(i->board[i[1],i[2]],r)
-    return (n*(n-1))÷2
+    return -((n*(n-1))÷2)
 end
 
 function getRowConstraints(n,λ)   
@@ -84,7 +86,7 @@ function backtrackingQueens(n)
         end
     end
     domain = [0,1]
-    constraints = getConstraints(n,λbool)
+    constraints = getConstraints(n,λconsistent)
     board = zeros(Int64,n,n)
 
     successor = x -> begin
@@ -97,4 +99,50 @@ function backtrackingQueens(n)
     solution = backtracking(variables,domain,constraints,board,successor,goal)
     println(sum(solution))
     println(solution)
+end
+
+mutation = function(variables, domain, board, κ)
+    mutatedBoard = copy(board)
+    count = 0
+    while count < κ
+        indexes = findall(entry -> entry == 1, board)
+        randomEntry = rand(1:length(variables))
+        if mutatedBoard[randomEntry] != 1
+            mutatedBoard[randomEntry] = 1
+            mutatedBoard[rand(indexes)] = 0
+            count += 1
+        end
+    end
+    return mutatedBoard
+end
+
+
+"N Queens solution using Evolution Strategy"
+function evolutionStrategyQueens(n)
+
+    variables = Vector{Tuple{Int64,Int64}}()
+    for i in 1:n
+        for j in 1:n
+           push!(variables,(i,j)) 
+        end
+    end
+    domain = [0,1]
+    constraints = getConstraints(n,λattacks)
+    board = zeros(Int64,n,n)
+    while sum(board) != n
+        board[rand(1:length(board))] = 1
+    end
+
+    goalValue = 0
+    println("Constraint goal: $goalValue attacks")
+
+    evolutionGoal = (v, d, c, a, e) -> e(c,a) == 0 
+
+    result = eVolution(variables,domain,constraints,board,evolutionGoal,1,1,2,
+        mutation)
+    ev = evaluate(constraints,result)
+    println("Best ES result (constraints satisfied): [$ev]")
+    println(result)
+    queens = sum(result)
+    println("Total queens: $queens")
 end
