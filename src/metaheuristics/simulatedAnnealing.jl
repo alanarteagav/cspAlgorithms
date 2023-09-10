@@ -1,14 +1,12 @@
 "Simulated Annealing Algorithm"
 function simulatedAnnealing(variables, domain, constraints, solution, 
-    bestSolution, max, goal, temperature, decay)
+    bestSolution, max, goal, temperature, decay, getNeighbourSolution)
 
     while temperature > 2 && !goal(variables, domain, constraints, solution, evaluate)
-        newSolution = copy(solution)
-    
-        (variable,value) = choose(variables,domain)
-        newSolution[variable...] = value    
 
+        newSolution = getNeighbourSolution(solution,variables,domain)
         result = evaluate(constraints, newSolution)
+        
         if result > evaluate(constraints, bestSolution) 
             bestSolution = copy(newSolution)
             println("Best: $result, T: $temperature K")

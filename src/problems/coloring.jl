@@ -46,6 +46,13 @@ function backtrackingColoring(data)
     println("Coloring backtracking result (constraints satisfied): [$ev]")
 end
 
+getNeighbourGraphSolution = function (solution,variables,domain)
+    newSolution = copy(solution)
+    (variable,value) = choose(variables,domain)
+    newSolution[variable...] = value    
+    return newSolution
+end
+
 "Graph Coloring solution using Simulated Annealing"
 function simulatedAnnealingColoring(data)
     (variables,domain,constraints,assignments) = dataToProblem(data, constraint)
@@ -65,7 +72,8 @@ function simulatedAnnealingColoring(data)
     annealingGoal = (v, d, c, a, e) -> e(c,a) == length(c)
     
     result = simulatedAnnealing(variables, domain, constraints, solution, 
-        solution, evaluate(constraints,solution), annealingGoal, 200, 0.9999)
+        solution, evaluate(constraints,solution), annealingGoal, 200, 0.9999, 
+        getNeighbourGraphSolution)
 
     ev = evaluate(constraints,result)
     println("Best SA result (constraints satisfied): [$ev]")

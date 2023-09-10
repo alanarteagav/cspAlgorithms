@@ -10,6 +10,24 @@ f = (x1,x2) -> -(x2+47)*sin(sqrt(abs(x2+x1/2+47)))-x1*sin(sqrt(abs(x1-(x2+47))))
     return n
 end
 
+getEggNeighbour = function(solution,variables,domain)
+    neighbourSolution = copy(solution)
+    ok = false
+    while !ok
+        Δ1 = rand(-1:2:1)
+        Δ2 = rand(-1:2:1)
+        x1 = solution[1] + Δ1
+        x2 = solution[2] + Δ2
+        if -512 <= x1 <= 512 && -512 <= x2 <= 512
+            ok = true
+            neighbourSolution[1] = x1
+            neighbourSolution[2] = x2
+            break
+        end
+    end
+    return neighbourSolution
+end
+
 "N Queens solution using Simulated Annealing"
 function simulatedAnnealingEgg()
     variables = Vector{}()
@@ -29,13 +47,12 @@ function simulatedAnnealingEgg()
     annealingGoal = (v, d, c, a, e) -> f(a[1],a[2]) <= -959.5
     
     result = simulatedAnnealing(variables, domain, constraints, solution, 
-        solution, f(solution[1],solution[2]), annealingGoal, 200, 0.9999)
+        solution, f(solution[1],solution[2]), annealingGoal, 200, 0.9999,
+        getEggNeighbour)
 
     ev = evaluate(constraints,result)
     println("Best SA result (constraints satisfied): [$ev]")
     println(result)
-    queens = sum(result)
-    println("Total queens: $queens")
 end
 
 eggMutation = function(variables, domain, solution, κ)

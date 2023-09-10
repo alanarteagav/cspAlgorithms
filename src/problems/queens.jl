@@ -98,19 +98,19 @@ function backtrackingQueens(n)
     println(solution)
 end
 
-mutation = function(variables, domain, board, κ)
-    mutatedBoard = copy(board)
+getNeighbourBoardSolution = function (board,variables,domain)
+    newBoard = copy(board)
     count = 0
-    while count < κ
+    while count < 1
         indexes = findall(entry -> entry == 1, board)
         randomEntry = rand(1:length(variables))
-        if mutatedBoard[randomEntry] != 1
-            mutatedBoard[randomEntry] = 1
-            mutatedBoard[rand(indexes)] = 0
+        if newBoard[randomEntry] != 1
+            newBoard[randomEntry] = 1
+            newBoard[rand(indexes)] = 0
             count += 1
         end
     end
-    return mutatedBoard
+    return newBoard
 end
 
 "N Queens solution using Simulated Annealing"
@@ -138,13 +138,29 @@ function simulatedAnnealingQueens(n)
     annealingGoal = (v, d, c, a, e) -> e(c,a) == 0 
     
     result = simulatedAnnealing(variables, domain, constraints, board, 
-        board, evaluate(constraints,board), annealingGoal, 200, 0.9999)
+        board, evaluate(constraints,board), annealingGoal, 200, 0.9999, 
+        getNeighbourBoardSolution)
 
     ev = evaluate(constraints,result)
     println("Best SA result (constraints satisfied): [$ev]")
     println(result)
     queens = sum(result)
     println("Total queens: $queens")
+end
+
+mutation = function(variables, domain, board, κ)
+    mutatedBoard = copy(board)
+    count = 0
+    while count < κ
+        indexes = findall(entry -> entry == 1, board)
+        randomEntry = rand(1:length(variables))
+        if mutatedBoard[randomEntry] != 1
+            mutatedBoard[randomEntry] = 1
+            mutatedBoard[rand(indexes)] = 0
+            count += 1
+        end
+    end
+    return mutatedBoard
 end
 
 "N Queens solution using Evolution Strategy"
