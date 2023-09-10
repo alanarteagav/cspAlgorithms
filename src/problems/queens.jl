@@ -1,8 +1,6 @@
 using Random
 
-export backtrackingQueens, simulatedAnnealingQueens, evolutionStrategyQueens,
-    getRowConstraints, getConstraints, getColumnConstraints, getDiagonalConstraints,
-    λattacks, λconsistent, backtrackingQueens, evolutionStrategyQueens
+export backtrackingQueens, simulatedAnnealingQueens, evolutionStrategyQueens
 
 λconsistent = function(board,r...)
     n = sum(i->board[i[1],i[2]],r)
@@ -116,6 +114,39 @@ mutation = function(variables, domain, board, κ)
     return mutatedBoard
 end
 
+"N Queens solution using Simulated Annealing"
+function simulatedAnnealingQueens(n)
+
+    variables = Vector{Tuple{Int64,Int64}}()
+    for i in 1:n
+        for j in 1:n
+           push!(variables,(i,j)) 
+        end
+    end
+    domain = [0,1]
+    constraints = getConstraints(n,λattacks)
+    board = zeros(Int64,n,n)
+    while sum(board) != n
+        board[rand(1:length(board))] = 1
+    end
+
+    randomValue = evaluate(constraints,board)
+    println("Random solution value: $randomValue")
+
+    goalValue = 0
+    println("Constraint goal: $goalValue attacks")
+
+    annealingGoal = (v, d, c, a, e) -> e(c,a) == 0 
+    
+    result = simulatedAnnealing(variables, domain, constraints, board, 
+        board, evaluate(constraints,board), annealingGoal, 200, 0.9999)
+
+    ev = evaluate(constraints,result)
+    println("Best SA result (constraints satisfied): [$ev]")
+    println(result)
+    queens = sum(result)
+    println("Total queens: $queens")
+end
 
 "N Queens solution using Evolution Strategy"
 function evolutionStrategyQueens(n)
