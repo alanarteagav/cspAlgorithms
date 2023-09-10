@@ -17,7 +17,6 @@ end
 end
 
 function getRowConstraints(n,λ)   
-    # rowConstraints = Vector{Tuple{Ntuple{n,Tuple{Int64,Int64}},Function}}()
     rowConstraints = Vector()
     for i in 1:n
         tuple = ntuple(j -> (i,j),n)

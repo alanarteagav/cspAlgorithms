@@ -18,7 +18,7 @@ function eVolution(variables, domain, constraints, solutionTemplate, goal, μ, �
         end
     else 
         for m in 1:μ
-            mSolution = shuffle!(copy(solutionTemplate))
+            mSolution = mutation(variables, domain, solutionTemplate,κ)
             push!(M,mSolution)
         end
     end 
@@ -44,9 +44,9 @@ function eVolution(variables, domain, constraints, solutionTemplate, goal, μ, �
         sort!(M, by=(x) -> evaluate(constraints,x), rev=true)
         bestSolution = M[1]
         result = evaluate(constraints,bestSolution)
-        println("Best: $result, $generation")
+        # println("Best: $result, $generation")
         if 0 == mod(generation,1000)
-            println("Best: $result, $generation")
+            println("Best: $result, $generation, $bestSolution")
         end
         # restart
         M = M[1:μ]
