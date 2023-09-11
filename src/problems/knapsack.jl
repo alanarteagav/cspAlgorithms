@@ -157,3 +157,58 @@ function simulatedAnnealingKS(data,max)
     println("Weight: [$weight]")
     println("Value: [$value]")
 end
+
+ksMutation = function (variables, domain, solution, κ)
+    newSolution = copy(solution)
+    count = 0
+    while count < κ
+        indexes = findall(entry -> entry == 1, solution)
+        randomEntry = variables[rand(1:length(variables))]
+        if newSolution[randomEntry] != 1
+            newSolution[randomEntry] = 1
+            newSolution[rand(indexes)] = 0
+            count += 1
+        end
+    end
+    return newSolution
+end
+
+"Knapsack solution using Evolution Strategy"
+function evolutionStrategyKS(data,max)
+    (variables,domain,constraints,solution,capacity) = dataToKS(data, λks)
+     
+    shuffle!(variables)
+    for variable in variables
+        solution[variable] = 0
+    end
+
+    weight = 0
+    lastVariable = nothing
+    for variable in variables
+        if rand(0:1) == 1
+            (vi,wi) = variable
+            solution[variable] = 1
+            lastVariable = variable
+            weight += wi
+        end
+        if weight > capacity
+            solution[lastVariable] = 0
+            weight -= lastVariable[2]
+            break
+        end
+    end
+
+    randomValue = evaluate(constraints,solution)
+    println("Random solution value: $randomValue")
+
+    evolutionGoal = (v, d, c, s, e) -> e(c,s) >= max
+
+    result = eVolution(variables,domain,constraints,solution,evolutionGoal,2,5,3, 
+        ksMutation)
+    ev = evaluate(constraints,result)
+    println("Best KS result (constraints satisfied): [$ev]")
+
+    (value, weight) = evaluateKS(result)
+    println("Weight: [$weight]")
+    println("Value: [$value]")
+end

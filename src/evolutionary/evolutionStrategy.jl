@@ -46,7 +46,7 @@ function eVolution(variables, domain, constraints, solutionTemplate, goal, μ, �
         result = evaluate(constraints,bestSolution)
         # println("Best: $result, $generation")
         if 0 == mod(generation,1000)
-            println("Best: $result, $generation, $bestSolution")
+            println("Best: $result, $generation")
         end
         # restart
         M = M[1:μ]
