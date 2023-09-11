@@ -6,7 +6,7 @@ module CspAlgorithms
     using .Csp
 
     coloringData = readInput("./data/gc_50")
-    ksData = readInput("./data/ks_10000")
+    ksData = readInput("./data/ks_19")
     
     # backtrackingColoring(coloringData)
     # simulatedAnnealingColoring(coloringData)
@@ -19,7 +19,8 @@ module CspAlgorithms
     # simulatedAnnealingEgg()
     # evolutionStrategyEgg()
 
-    backtrackingKS(ksData)
+    # backtrackingKS(ksData)
+    # simulatedAnnealingKS(ksData,1060000)
 end
 
 
