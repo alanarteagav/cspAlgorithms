@@ -3,6 +3,7 @@ module Problems
         
     include("coloring.jl")
     include("eggholder.jl")
+    include("knapsack.jl")
     include("queens.jl")
     include("input.jl")
     
