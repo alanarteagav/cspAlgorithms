@@ -44,6 +44,18 @@ function backtrackingColoring(data)
 
     ev = evaluate(constraints,result)
     println("Coloring backtracking result (constraints satisfied): [$ev]")
+
+    colors = Set()
+    for (vertex,color) in result
+        push!(colors,color)
+    end
+    colorNumber = length(colors)
+    println("colors used: $colorNumber")
+
+    println("$colorNumber")
+    for (vertex,color) in result
+        println("color: $color, vertex: $vertex")
+    end
 end
 
 getNeighbourGraphSolution = function (solution,variables,domain)
@@ -69,14 +81,26 @@ function simulatedAnnealingColoring(data)
     goalValue = length(constraints)
     println("Constraint goal: $goalValue")
     
-    annealingGoal = (v, d, c, a, e) -> e(c,a) == length(c)
+    annealingGoal = (v, d, c, a, e) -> e(c,a) >= 449350
     
     result = simulatedAnnealing(variables, domain, constraints, solution, 
-        solution, evaluate(constraints,solution), annealingGoal, 200, 0.9999, 
+        solution, evaluate(constraints,solution), annealingGoal, 8000, 0.9999, 
         getNeighbourGraphSolution)
 
     ev = evaluate(constraints,result)
     println("Best SA result (constraints satisfied): [$ev]")
+
+    colors = Set()
+    for (vertex,color) in result
+        push!(colors,color)
+    end
+    colorNumber = length(colors)
+    println("colors used: $colorNumber")
+
+    println("$colorNumber")
+    for (vertex,color) in result
+        println("color: $color, vertex: $vertex")
+    end
 end
 
 graphMutation = function(variables, domain, solution, κ)
@@ -96,8 +120,20 @@ function evolutionStrategyColoring(data)
 
     evolutionGoal = (v, d, c, a, e) -> e(c,a) == length(c)
 
-    result = eVolution(variables,domain,constraints,Dict(),evolutionGoal,1,1,4, 
-        graphMutation)
+    result = eVolution(variables,domain,constraints,Dict(),evolutionGoal,1,1,1, 
+        graphMutation, 3e4)
     ev = evaluate(constraints,result)
     println("Best ES result (constraints satisfied): [$ev]")
+
+    colors = Set()
+    for (vertex,color) in result
+        push!(colors,color)
+    end
+    colorNumber = length(colors)
+    println("colors used: $colorNumber")
+
+    println("$colorNumber")
+    for (vertex,color) in result
+        println("color: $color, vertex: $vertex")
+    end
 end

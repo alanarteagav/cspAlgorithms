@@ -92,7 +92,7 @@ function evolutionStrategyEgg()
     evolutionGoal = (v, d, c, a, e) -> f(a[1],a[2]) <= -959.5
 
     result = eVolution(variables,domain,constraints,solution,evolutionGoal,3,7,500,
-        eggMutation)
+        eggMutation, 1e6)
     ev = evaluate(constraints,result)
     println("Best ES result: [$ev]")
     println(result)

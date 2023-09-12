@@ -138,7 +138,7 @@ function simulatedAnnealingQueens(n)
     annealingGoal = (v, d, c, a, e) -> e(c,a) == 0 
     
     result = simulatedAnnealing(variables, domain, constraints, board, 
-        board, evaluate(constraints,board), annealingGoal, 200, 0.9999, 
+        board, evaluate(constraints,board), annealingGoal, 5000, 0.98, 
         getNeighbourBoardSolution)
 
     ev = evaluate(constraints,result)
@@ -185,7 +185,7 @@ function evolutionStrategyQueens(n)
     evolutionGoal = (v, d, c, a, e) -> e(c,a) == 0 
 
     result = eVolution(variables,domain,constraints,board,evolutionGoal,1,1,2,
-        mutation)
+        mutation,5e5)
     ev = evaluate(constraints,result)
     println("Best ES result (constraints satisfied): [$ev]")
     println(result)

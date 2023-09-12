@@ -2,7 +2,7 @@ using Random
 
 "Evolution strategy"
 function eVolution(variables, domain, constraints, solutionTemplate, goal, μ, λ, κ,
-    mutation)
+    mutation, maxGenerations)
     Λ = Vector()
     M = Vector()
 
@@ -44,9 +44,12 @@ function eVolution(variables, domain, constraints, solutionTemplate, goal, μ, �
         sort!(M, by=(x) -> evaluate(constraints,x), rev=true)
         bestSolution = M[1]
         result = evaluate(constraints,bestSolution)
-        # println("Best: $result, $generation")
+         println("Best: $result, $generation")
         if 0 == mod(generation,1000)
-            println("Best: $result, $generation")
+            # println("Best: $result, $generation")
+        end
+        if generation >= maxGenerations
+            return bestSolution
         end
         # restart
         M = M[1:μ]

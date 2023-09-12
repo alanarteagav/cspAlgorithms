@@ -93,11 +93,19 @@ function backtrackingKS(data)
 
     ev = evaluate(constraints,result)
     println("KS backtracking result (constraints satisfied): [$ev]")
-    println(result)
+    # println(result)
 
     (value, weight) = evaluateKS(result)
     println("Weight: [$weight]")
     println("Value: [$value]")
+
+    solutionVector = Vector()
+    for (pair,v) in solution
+        if v == 1
+            push!(solutionVector,pair)
+        end
+    end
+    print(solutionVector)
 
 end
 
@@ -147,7 +155,7 @@ function simulatedAnnealingKS(data,max)
     annealingGoal = (v, d, c, s, e) -> e(c,s) >= max
 
     result = simulatedAnnealing(variables, domain, constraints, solution, 
-    solution, evaluate(constraints,solution), annealingGoal, 2e2, 0.999, 
+    solution, evaluate(constraints,solution), annealingGoal, 3e2, 0.999, 
     getNeighbourKSSolution)
 
     ev = evaluate(constraints,result)
@@ -156,6 +164,14 @@ function simulatedAnnealingKS(data,max)
     (value, weight) = evaluateKS(result)
     println("Weight: [$weight]")
     println("Value: [$value]")
+
+    solutionVector = Vector()
+    for (pair,v) in solution
+        if v == 1
+            push!(solutionVector,pair)
+        end
+    end
+    print(solutionVector)
 end
 
 ksMutation = function (variables, domain, solution, κ)
@@ -203,12 +219,20 @@ function evolutionStrategyKS(data,max)
 
     evolutionGoal = (v, d, c, s, e) -> e(c,s) >= max
 
-    result = eVolution(variables,domain,constraints,solution,evolutionGoal,2,5,3, 
-        ksMutation)
+    result = eVolution(variables,domain,constraints,solution,evolutionGoal,1,1,2, 
+        ksMutation,5e5)
     ev = evaluate(constraints,result)
     println("Best KS result (constraints satisfied): [$ev]")
 
     (value, weight) = evaluateKS(result)
     println("Weight: [$weight]")
     println("Value: [$value]")
+
+    solutionVector = Vector()
+    for (pair,v) in solution
+        if v == 1
+            push!(solutionVector,pair)
+        end
+    end
+    print(solutionVector)
 end
