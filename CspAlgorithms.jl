@@ -25,7 +25,7 @@ module CspAlgorithms
     # simulatedAnnealingKS(ksData10k,1070000)
     # evolutionStrategyKS(ksData10k,1094000) 
     end
-    
+
 end
 
 

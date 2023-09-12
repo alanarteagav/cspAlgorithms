@@ -81,7 +81,7 @@ function simulatedAnnealingColoring(data)
     goalValue = length(constraints)
     println("Constraint goal: $goalValue")
     
-    annealingGoal = (v, d, c, a, e) -> e(c,a) >= 449350
+    annealingGoal = (v, d, c, a, e) -> e(c,a) >= 449320
     
     result = simulatedAnnealing(variables, domain, constraints, solution, 
         solution, evaluate(constraints,solution), annealingGoal, 8000, 0.9999, 
