@@ -1,10 +1,12 @@
 using Random
 
-"Evolution strategy"
-function eVolution(variables, domain, constraints, solutionTemplate, goal, μ, λ, κ,
+"Evolution strategy with Tabu list"
+function evolutionTabu(variables, domain, constraints, solutionTemplate, goal, μ, λ, κ,
     mutation, maxGenerations)
     Λ = Vector()
     M = Vector()
+    # tabu list
+    τ = Vector()
 
     # initial population
     if isempty(solutionTemplate)
@@ -26,10 +28,15 @@ function eVolution(variables, domain, constraints, solutionTemplate, goal, μ, �
 
     while !goal(variables, domain, constraints, bestSolution, evaluate)
         generation += 1
-        for i in 1:λ
+        while length(Λ) != λ 
             parent = M[rand(1:length(M))]
             mutatedSolution = mutation(variables, domain, parent,κ)
-            push!(Λ, mutatedSolution)
+            if !(mutatedSolution in τ)
+                push!(τ, mutatedSolution)
+                push!(Λ, mutatedSolution)
+            else
+                println("Already seen")
+            end
         end
         # tournament
         nM = Vector()
@@ -43,7 +50,7 @@ function eVolution(variables, domain, constraints, solutionTemplate, goal, μ, �
         sort!(M, by=(x) -> evaluate(constraints,x), rev=true)
         bestSolution = M[1]
         result = evaluate(constraints,bestSolution)
-         println("Best: $result, $generation")
+        println("Best: $result, $generation")
         if 0 == mod(generation,1000)
             # println("Best: $result, $generation")
         end

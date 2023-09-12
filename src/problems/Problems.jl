@@ -10,6 +10,9 @@ module Problems
     include("../backtracking/Backtracking.jl")
     using .Backtracking
 
+    include("../hybrid/Hybrid.jl")
+    using .Hybrid
+
     include("../metaheuristics/Metaheuristics.jl")
     using .Metaheuristics
 

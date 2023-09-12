@@ -1,4 +1,5 @@
-export backtrackingColoring, simulatedAnnealingColoring, evolutionStrategyColoring
+export backtrackingColoring, simulatedAnnealingColoring, evolutionStrategyColoring,
+    evolutionStrategyColoringTabu
 
 constraint = (a,x,y) -> if (a[x],a[y]) != (-1,-1)
     a[x] != a[y]
@@ -121,6 +122,34 @@ function evolutionStrategyColoring(data)
     evolutionGoal = (v, d, c, a, e) -> e(c,a) == length(c)
 
     result = eVolution(variables,domain,constraints,Dict(),evolutionGoal,1,1,1, 
+        graphMutation, 3e4)
+    ev = evaluate(constraints,result)
+    println("Best ES result (constraints satisfied): [$ev]")
+
+    colors = Set()
+    for (vertex,color) in result
+        push!(colors,color)
+    end
+    colorNumber = length(colors)
+    println("colors used: $colorNumber")
+
+    println("$colorNumber")
+    for (vertex,color) in result
+        println("color: $color, vertex: $vertex")
+    end
+end
+
+
+"Graph Coloring solution using Evolution Strategy with Tabu list"
+function evolutionStrategyColoringTabu(data)
+    (variables,domain,constraints,assignments) = dataToProblem(data, constraint)
+
+    goalValue = length(constraints)
+    println("Constraint goal: $goalValue")
+
+    evolutionGoal = (v, d, c, a, e) -> e(c,a) == length(c)
+
+    result = evolutionTabu(variables,domain,constraints,Dict(),evolutionGoal,1,1,1, 
         graphMutation, 3e4)
     ev = evaluate(constraints,result)
     println("Best ES result (constraints satisfied): [$ev]")

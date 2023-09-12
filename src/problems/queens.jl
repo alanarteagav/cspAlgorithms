@@ -1,6 +1,7 @@
 using Random
 
-export backtrackingQueens, simulatedAnnealingQueens, evolutionStrategyQueens
+export backtrackingQueens, simulatedAnnealingQueens, evolutionStrategyQueens,
+    evolutionStrategyQueensTabu
 
 λconsistent = function(board,r...)
     n = sum(i->board[i[1],i[2]],r)
@@ -185,6 +186,36 @@ function evolutionStrategyQueens(n)
     evolutionGoal = (v, d, c, a, e) -> e(c,a) == 0 
 
     result = eVolution(variables,domain,constraints,board,evolutionGoal,1,1,2,
+        mutation,5e5)
+    ev = evaluate(constraints,result)
+    println("Best ES result (constraints satisfied): [$ev]")
+    println(result)
+    queens = sum(result)
+    println("Total queens: $queens")
+end
+
+"N Queens solution using Evolution Strategy with tabu list"
+function evolutionStrategyQueensTabu(n)
+
+    variables = Vector{Tuple{Int64,Int64}}()
+    for i in 1:n
+        for j in 1:n
+           push!(variables,(i,j)) 
+        end
+    end
+    domain = [0,1]
+    constraints = getConstraints(n,λattacks)
+    board = zeros(Int64,n,n)
+    while sum(board) != n
+        board[rand(1:length(board))] = 1
+    end
+
+    goalValue = 0
+    println("Constraint goal: $goalValue attacks")
+
+    evolutionGoal = (v, d, c, a, e) -> e(c,a) == 0 
+
+    result = evolutionTabu(variables,domain,constraints,board,evolutionGoal,1,1,2,
         mutation,5e5)
     ev = evaluate(constraints,result)
     println("Best ES result (constraints satisfied): [$ev]")

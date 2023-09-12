@@ -12,10 +12,12 @@ module CspAlgorithms
     # backtrackingColoring(coloringData)
     # simulatedAnnealingColoring(coloringData)
     # evolutionStrategyColoring(coloringData)
+    # evolutionStrategyColoringTabu(coloringData)
 
     # backtrackingQueens(8)
     # simulatedAnnealingQueens(8)
     # evolutionStrategyQueens(8)
+    # evolutionStrategyQueensTabu(50)
     
     # simulatedAnnealingEgg()
     # evolutionStrategyEgg()
